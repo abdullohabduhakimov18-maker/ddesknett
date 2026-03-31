@@ -6,8 +6,8 @@ import { fileURLToPath } from "url";
 import nodemailer from "nodemailer";
 import { Server } from "socket.io";
 import { createServer } from "http";
-import { store } from "./server/store.ts";
-import { v4 as uuidv4 } from 'uuid';
+import { store } from "./server/store";
+const uuidv4 = () => Math.random().toString(36).substring(2) + Date.now().toString(36);
 
 dotenv.config();
 

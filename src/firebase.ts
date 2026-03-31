@@ -1,5 +1,7 @@
 import { api, socket } from "./services/api";
 
+const uuidv4 = () => Math.random().toString(36).substring(2) + Date.now().toString(36);
+
 // Mock Firebase Auth
 export const auth = {
   get currentUser() {
@@ -42,6 +44,17 @@ export const createUserWithEmailAndPassword = async (authInstance: any, email: s
   localStorage.setItem('desklink_user', JSON.stringify(user));
   window.dispatchEvent(new Event('storage'));
   return { user };
+};
+
+export const updateProfile = async (user: any, data: { displayName?: string, photoURL?: string }) => {
+  const updatedUser = { ...user, ...data };
+  localStorage.setItem('desklink_user', JSON.stringify(updatedUser));
+  window.dispatchEvent(new Event('storage'));
+  // Also update in backend if possible
+  if (user.uid) {
+    await api.updateUser(user.uid, { name: data.displayName, role: data.photoURL as any });
+  }
+  return updatedUser;
 };
 
 // Firestore functions
@@ -236,5 +249,3 @@ export enum OperationType {
 export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
   console.error('API Error: ', error, operationType, path);
 }
-
-const uuidv4 = () => Math.random().toString(36).substring(2) + Date.now().toString(36);

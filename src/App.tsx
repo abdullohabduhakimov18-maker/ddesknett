@@ -78,7 +78,7 @@ import EngineerPortal from "./components/EngineerPortal";
 import ClientPortal from "./components/ClientPortal";
 import AdminPortal from "./components/AdminPortal";
 import ContactPage from "./components/ContactPage";
-import { v4 as uuidv4 } from 'uuid';
+const uuidv4 = () => Math.random().toString(36).substring(2) + Date.now().toString(36);
 import { 
   auth, 
   db, 

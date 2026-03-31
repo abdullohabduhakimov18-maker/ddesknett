@@ -54,14 +54,29 @@ class Store {
   }
 
   private seed() {
+    const adminEmail = process.env.ADMIN_EMAIL || 'logistmate@gmail.com';
+    const masterPassword = process.env.MASTER_PASSWORD || 'desklink2026';
+
     this.users.push({
       uid: 'admin-1',
-      email: 'admin@desknet.com',
-      password: 'password123',
+      email: adminEmail,
+      password: masterPassword,
       name: 'Admin User',
       role: 'admin',
       createdAt: new Date().toISOString(),
     });
+
+    // Also keep the old one just in case
+    if (adminEmail !== 'admin@desknet.com') {
+      this.users.push({
+        uid: 'admin-2',
+        email: 'admin@desknet.com',
+        password: 'password123',
+        name: 'Legacy Admin',
+        role: 'admin',
+        createdAt: new Date().toISOString(),
+      });
+    }
 
     this.jobs.push({
       id: 'job-1',

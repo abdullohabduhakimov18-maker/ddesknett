@@ -7,23 +7,49 @@ export const socket = io();
 export const api = {
   // Auth
   async login(email: string, password: string) {
-    const res = await fetch(`${API_URL}/api/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) throw new Error(await res.text());
-    return res.json();
+    try {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        let errorMsg = text;
+        try {
+          const json = JSON.parse(text);
+          errorMsg = json.error || text;
+        } catch (e) {}
+        throw new Error(errorMsg);
+      }
+      return res.json();
+    } catch (err: any) {
+      console.error("API Login Error:", err);
+      throw err;
+    }
   },
 
   async signup(data: any) {
-    const res = await fetch(`${API_URL}/api/auth/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) throw new Error(await res.text());
-    return res.json();
+    try {
+      const res = await fetch(`${API_URL}/api/auth/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        let errorMsg = text;
+        try {
+          const json = JSON.parse(text);
+          errorMsg = json.error || text;
+        } catch (e) {}
+        throw new Error(errorMsg);
+      }
+      return res.json();
+    } catch (err: any) {
+      console.error("API Signup Error:", err);
+      throw err;
+    }
   },
 
   // Jobs
